@@ -1,0 +1,61 @@
+﻿@using Logistics.Models
+@model PizzaStatistics
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="text-center">
+    <p>Advanced Proprietary Pizza Logistics Engine (APPLE)</p>
+
+    <h1 class="display-4">Statistics</h1>
+    <br />
+    <br />
+    @if(Model != null)
+    {
+        //Question 1
+        {
+            var depts = Model.DepartmentsWithMostVotes(Model.ToppingToCount);
+            <p>The department(s) having the largest number of employees who like <strong>@Model.ToppingToCount</strong> is(are)<br />
+            @foreach(var dept in depts)
+            {
+                <strong>@dept</strong>
+                <br />
+            }
+            </p>
+        }
+        <br /><hr><br />
+
+        //Question 2
+        <p>It would take 
+            <strong>@Model.GetDepartment(Model.DepartmentToFeed)?.PizzaQty()</strong> 
+            pizzas to feed the 
+            <strong>@Model.DepartmentToFeed</strong> 
+            department of @Model.GetDepartment(Model.DepartmentToFeed)?.Size() employees.
+        </p>
+        <br /><hr><br />
+
+        //Question 3
+        <p>
+            Most popular topping combinations by department
+        </p>
+        <br />
+        @foreach(var dept in Model.Departments)
+        {
+            if (dept.PreferredToppingCount > 0 && dept.PreferredToppings != null)
+            {
+                <h6>@dept.Name (@dept.PreferredToppingCount employees per combination):</h6>
+                <p>
+                    @foreach(var toppingCombo in dept.PreferredToppings.OrderBy(a => a))
+                    {
+                        @toppingCombo
+                        <br />
+                    }
+                </p>   
+            }
+        }
+        <br /><br />
+    }
+</div>
+
+
+
